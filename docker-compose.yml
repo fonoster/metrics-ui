@@ -1,0 +1,68 @@
+version: '3.7'
+
+networks:
+  fonoster:
+
+services:
+
+  apiserver:
+    image: traefik:v2.8
+    # Enables the web UI and tells Traefik to listen to docker
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      - fonoster
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  webui:
+    image: fonoster/webui:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webui.rule=Host(`localhost`) && Path(`/home`)"
+    expose:
+      - 3000
+    environment:
+      - NEXTAUTH_URL
+      - ALLOW_INSECURE
+      - GITHUB_CLIENT_ID
+      - GITHUB_CLIENT_SECRET
+      - AUTH_SECRET
+      - JWT_SECRET
+      - LOGS_TRANSPORT
+      - LOGS_LEVEL
+    networks:
+      - fonoster
+    volumes:
+      - ${CONFIG}/.env:/app/.env
+      - ${CONFIG}/config:/home/nextjs/.fonoster/config
+
+  metrics-ui:
+    image: fonoster/metrics-ui:latest
+    build:
+      context: .
+    # FIXME
+    healthcheck:
+      test: ["CMD", "echo", "test"]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.metrics-ui.rule=Host(`localhost`) && PathPrefix(`${APP_BASE_PATH}`)"
+      - "traefik.http.services.metrics-ui.loadbalancer.server.port=3000"
+    expose:
+      - 3000
+    environment:
+      - APISERVER_ENDPOINT
+      - ALLOW_INSECURE
+      - LOGS_TRANSPORT
+      - LOGS_LEVEL
+    networks:
+      - fonoster
+    volumes:
+      - ${CONFIG}/.env:/app/.env:ro
+      - ${CONFIG}/config:/home/nextjs/.fonoster/config:ro
