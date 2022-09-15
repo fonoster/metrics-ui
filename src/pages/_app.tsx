@@ -20,7 +20,7 @@ const Application = ({ Component, pageProps: { ...pageProps } }: AppProps) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Hydrate state={pageProps?.dehydratedState}>
+      <Hydrate>
         <Meta />
         <Progress />
         <ReactQueryDevtools initialIsOpen={false} />
