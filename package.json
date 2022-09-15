@@ -21,7 +21,7 @@
     ]
   },
   "dependencies": {
-    "@fonoster/sdk": "^0.3.17-alpha.2",
+    "@fonoster/core": "^0.3.17-alpha.2",
     "@headlessui/react": "^1.4.2",
     "@heroicons/react": "^1.0.5",
     "@supabase/supabase-js": "^1.29.1",

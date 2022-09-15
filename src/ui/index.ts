@@ -1,7 +1,6 @@
 export * from './Button'
 export * from './Container'
 export * from './Meta'
-export * from './Panel'
 export * from './Paragraphs'
 export * from './Spinner'
 export * from './svg'

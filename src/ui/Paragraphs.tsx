@@ -2,7 +2,7 @@ import { Typography } from '@supabase/ui'
 import { Props } from '@supabase/ui/dist/cjs/components/Typography/Text'
 import React from 'react'
 
-import { classes } from '@/mods/shared/helpers/classes'
+import { classes } from '@/helpers/classes'
 
 type Paragraph = React.HTMLAttributes<HTMLParagraphElement> & {
   options?: Omit<Props, 'children'>

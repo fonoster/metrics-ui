@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { classes } from '@/mods/shared/helpers/classes'
+import { classes } from '@/helpers/classes'
 
 export const EmptyIcon: React.FC<React.HTMLAttributes<SVGAElement>> = ({
   className,

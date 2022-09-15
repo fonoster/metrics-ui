@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { classes } from '@/mods/shared/helpers/classes'
+import { classes } from '@/helpers/classes'
 
 export const Container: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   className,
