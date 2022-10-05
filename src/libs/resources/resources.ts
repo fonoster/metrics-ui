@@ -1,19 +1,17 @@
 import { routr } from '@fonoster/core'
 
 import { redis } from './connections'
-import { RESOURCE, ROUTR_RESOURCES, User } from './types'
+import { RESOURCE, ROUTR_RESOURCES } from './types'
 
 export const getUsers = async () => {
-  return ((await redis.smembers('fn_users')) || []).map(
-    user => JSON.parse(user) as User
-  )
+  return (await redis.smembers('fn_users')) || []
 }
 
-export const getProjects = async (users: User[]) => {
+export const getProjects = async (users: string[]) => {
   let projects: string[] = []
 
   for (const user of users) {
-    const projectsByUser = (await redis.smembers('u_' + user.ref)) || []
+    const projectsByUser = (await redis.smembers('u_' + user)) || []
 
     if (projectsByUser.length) projects = [...projects, ...projectsByUser]
   }

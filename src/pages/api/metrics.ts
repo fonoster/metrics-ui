@@ -39,18 +39,6 @@ export default async function handle(
       })
 
       response.push({
-        id: 'active_accounts',
-        label: 'Active Accounts',
-        count: users.filter(user => user.status === 'active').length,
-      })
-
-      response.push({
-        id: 'inactive_accounts',
-        label: 'Inactive Accounts',
-        count: users.filter(user => user.status !== 'active').length,
-      })
-
-      response.push({
         id: 'projects',
         label: 'Total Projects',
         count: projects.length,
