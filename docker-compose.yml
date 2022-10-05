@@ -4,65 +4,36 @@ networks:
   fonoster:
 
 services:
-
-  apiserver:
-    image: traefik:v2.8
-    # Enables the web UI and tells Traefik to listen to docker
-    command:
-      - "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker"
-    ports:
-      - "80:80"
-      - "8080:8080"
-    networks:
-      - fonoster
-    volumes:
-      # So that Traefik can listen to the Docker events
-      - /var/run/docker.sock:/var/run/docker.sock
-
-  webui:
-    image: fonoster/webui:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.webui.rule=Host(`localhost`) && Path(`/home`)"
-    expose:
-      - 3000
-    environment:
-      - NEXTAUTH_URL
-      - ALLOW_INSECURE
-      - GITHUB_CLIENT_ID
-      - GITHUB_CLIENT_SECRET
-      - AUTH_SECRET
-      - JWT_SECRET
-      - LOGS_TRANSPORT
-      - LOGS_LEVEL
-    networks:
-      - fonoster
-    volumes:
-      - ${CONFIG}/.env:/app/.env
-      - ${CONFIG}/config:/home/nextjs/.fonoster/config
-
   metrics-ui:
-    image: fonoster/metrics-ui:latest
-    build:
-      context: .
-    # FIXME
+    image: efrafonoster/metrics-ui:latest
+    restart: ${RESTART_POLICY}
     healthcheck:
       test: ["CMD", "echo", "test"]
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.metrics-ui.rule=Host(`localhost`) && PathPrefix(`${APP_BASE_PATH}`)"
-      - "traefik.http.services.metrics-ui.loadbalancer.server.port=3000"
+      - traefik.enable=true
+      - traefik.http.routers.metrics-ui.entrypoints=internal,websecure
+      - traefik.http.routers.metrics-ui.rule=Host(`${LETSENCRYPT_DOMAIN}`) && PathPrefix(`${APP_BASE_PATH:-/metrics}`)
+      - traefik.http.routers.metrics-ui.service=metrics-ui
+      - traefik.http.services.metrics-ui.loadbalancer.server.port=3000
     expose:
       - 3000
     environment:
-      - APISERVER_ENDPOINT
-      - ALLOW_INSECURE
-      - LOGS_TRANSPORT
-      - LOGS_LEVEL
+      APP_URL: ${PUBLIC_URL}
+      APP_BASE_PATH: /metrics
+      DS_HOST: ${DS_HOST}
+      DS_PORT: ${DS_PORT}
+      DS_SECRET: ${DS_SECRET}
+      APISERVER_ENDPOINT: "apiserver.fonoster:50051"
+      ALLOW_INSECURE: ${ALLOW_INSECURE}
+      LOGS_TRANSPORT: ${LOGS_TRANSPORT}
+      LOGS_LEVEL: ${LOGS_LEVEL}
+      SIPPROXY_API_HOST: ${SIPPROXY_API_HOST}
+      SIPPROXY_API_PORT: ${SIPPROXY_API_PORT}
+      SIPPROXY_API_USERNAME: ${SIPPROXY_API_USERNAME}
+      SIPPROXY_API_SECRET: ${SIPPROXY_API_SECRET}
     networks:
       - fonoster
-    volumes:
-      - ${CONFIG}/.env:/app/.env:ro
-      - ${CONFIG}/config:/home/nextjs/.fonoster/config:ro
+    # volumes:
+    # - ${CONFIG}/.env:/app/.env:ro
+    # - ${CONFIG}/config:/home/fonoster/.fonoster/config
+    # - ${CONFIG}/config:/home/nextjs/.fonoster/config:ro
