@@ -5,7 +5,7 @@ networks:
 
 services:
   metrics-ui:
-    image: efrafonoster/metrics-ui:latest
+    image: fonoster/metrics-ui:latest
     restart: ${RESTART_POLICY}
     healthcheck:
       test: ["CMD", "echo", "test"]
@@ -33,7 +33,6 @@ services:
       SIPPROXY_API_SECRET: ${SIPPROXY_API_SECRET}
     networks:
       - fonoster
-    # volumes:
-    # - ${CONFIG}/.env:/app/.env:ro
-    # - ${CONFIG}/config:/home/fonoster/.fonoster/config
-    # - ${CONFIG}/config:/home/nextjs/.fonoster/config:ro
+    volumes:
+      - /opt/fonoster/operator/.env:/app/.env:ro
+      - ${CONFIG}:/home/nextjs/.fonoster/config:ro
