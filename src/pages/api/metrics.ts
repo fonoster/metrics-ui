@@ -30,7 +30,7 @@ export default async function handle(
       const users = await getUsers()
       const projects = await getProjects(users)
 
-      const numbers = await getResource(projects)(RESOURCE.NUMBER)
+      const numbers = await getResource(RESOURCE.NUMBER)
 
       response.push({
         id: 'accounts',
@@ -47,7 +47,7 @@ export default async function handle(
       response.push({
         id: 'numbers',
         label: 'Total Numbers',
-        count: numbers,
+        count: numbers.length,
       })
 
       return response

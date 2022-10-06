@@ -16,12 +16,12 @@ export interface RoutrClient {
 }
 
 export enum RESOURCE {
-  PROVIDER = 'provider',
-  PROVIDER_ALIAS = 'gateways',
-  AGENT = 'agent',
-  DOMAIN = 'domain',
-  PROJECT = 'project',
-  NUMBER = 'number',
+  PROVIDER = 'gateways',
+  AGENT = 'agents',
+  DOMAIN = 'domains',
+  PROJECT = 'projects',
+  NUMBER = 'numbers',
+  USERS = 'fn_users',
 }
 
 export const ROUTR_RESOURCES = [
@@ -29,6 +29,8 @@ export const ROUTR_RESOURCES = [
   RESOURCE.DOMAIN,
   RESOURCE.NUMBER,
   RESOURCE.PROVIDER,
+  RESOURCE.PROJECT,
+  RESOURCE.USERS,
 ]
 
 export interface Entity {
