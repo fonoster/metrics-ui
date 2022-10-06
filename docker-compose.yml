@@ -15,6 +15,9 @@ services:
       - traefik.http.routers.metrics-ui.rule=Host(`${LETSENCRYPT_DOMAIN}`) && PathPrefix(`${APP_BASE_PATH:-/metrics}`)
       - traefik.http.routers.metrics-ui.service=metrics-ui
       - traefik.http.services.metrics-ui.loadbalancer.server.port=3000
+      - traefik.http.middlewares.metrics-ui-auth.basicauth.users=${JAEGER_USERNAME}:${JAEGER_PASSWORD_HASH}
+      - traefik.http.middlewares.metrics-ui-chain.chain.middlewares=metrics-ui-auth
+      - traefik.http.routers.metrics-ui.middlewares=metrics-ui-chain
     expose:
       - 3000
     environment:
@@ -27,10 +30,6 @@ services:
       ALLOW_INSECURE: ${ALLOW_INSECURE}
       LOGS_TRANSPORT: ${LOGS_TRANSPORT}
       LOGS_LEVEL: ${LOGS_LEVEL}
-      SIPPROXY_API_HOST: ${SIPPROXY_API_HOST}
-      SIPPROXY_API_PORT: ${SIPPROXY_API_PORT}
-      SIPPROXY_API_USERNAME: ${SIPPROXY_API_USERNAME}
-      SIPPROXY_API_SECRET: ${SIPPROXY_API_SECRET}
     networks:
       - fonoster
     volumes:
