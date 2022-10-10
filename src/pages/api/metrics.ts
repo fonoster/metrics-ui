@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import { requestHandler } from '@/libs/api'
 import { getProjects, getResource, getUsers, RESOURCE } from '@/libs/resources'
+import { getRevenueFromGithub } from '@/libs/resources/revenue-from-github'
 
 export default async function handle(
   req: NextApiRequest,
@@ -16,21 +17,24 @@ export default async function handle(
           count: 0,
         },
         {
-          id: 'revenue_github',
-          label: 'Monthly Revenue from Github',
-          count: 'Coming soon...',
-        },
-        {
           id: 'revenue_stripe',
           label: 'Monthly Revenue from Stripe',
           count: 'Coming soon...',
         },
       ]
 
+      const revenueFromGithub = await getRevenueFromGithub()
+
       const users = await getUsers()
       const projects = await getProjects(users)
 
       const numbers = await getResource(RESOURCE.NUMBER)
+
+      response.push({
+        id: 'revenue_github',
+        label: 'Monthly Revenue from Github',
+        count: revenueFromGithub,
+      })
 
       response.push({
         id: 'accounts',
