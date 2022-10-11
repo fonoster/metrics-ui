@@ -17,7 +17,7 @@ const query = `{
 }`
 
 export const getRevenueFromGithub = async () => {
-  if (!process.env.GITHUB_ACCESS_TOKEN) return 0
+  if (!process.env.GITHUB_ACCESS_TOKEN) return '0'
 
   const response = await axios({
     method: 'POST',
@@ -30,5 +30,10 @@ export const getRevenueFromGithub = async () => {
 
   const data = { ...response.data?.data } as Response
 
-  return data.organization.monthlyEstimatedSponsorsIncomeInCents / 100
+  if (!data?.organization) return '0'
+
+  return new Intl.NumberFormat('en-EN', {
+    currency: 'USD',
+    style: 'currency',
+  }).format(data.organization.monthlyEstimatedSponsorsIncomeInCents / 100)
 }
