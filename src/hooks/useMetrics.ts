@@ -8,15 +8,31 @@ interface Metric {
   count: number | string
 }
 
-export const useMetrics = (queryKey = 'metrics') => {
-  const { data, isLoading, isSuccess } = useQuery<Metric[]>(
-    [queryKey],
-    async () => (await API.get('/metrics')).data.data
+export const useMetrics = (
+  params?: { start?: string; end?: string; range?: string },
+  refetchInterval = 0,
+  queryKey = 'metrics'
+) => {
+  const { data, isLoading, isSuccess, isRefetching, isFetching } = useQuery<
+    Metric[]
+  >(
+    [queryKey, params],
+    async () =>
+      (
+        await API.get('/metrics', {
+          params,
+        })
+      ).data.data,
+    {
+      refetchInterval,
+    }
   )
 
   return {
     metrics: data ?? [],
     isLoading,
     isSuccess,
+    isRefetching,
+    isFetching,
   }
 }

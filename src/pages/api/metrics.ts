@@ -1,7 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { requestHandler } from '@/libs/api'
-import { getProjects, getResource, getUsers, RESOURCE } from '@/libs/resources'
+import {
+  getProjects,
+  getResource,
+  getUsers,
+  RangeType,
+  RESOURCE,
+} from '@/libs/resources'
 import { getRevenueFromGithub } from '@/libs/resources/revenue-from-github'
 import { getRevenueFromStripe } from '@/libs/resources/revenue-from-stripe'
 
@@ -11,14 +17,17 @@ export default async function handle(
 ) {
   const handlers = {
     get: async () => {
-      const users = await getUsers(req.body.range)
+      const { start, end } = req.query
+      const payload = { start, end } as RangeType
+
+      const users = await getUsers(payload)
 
       const [revenueFromGithub, revenueFromStripe, projects, numbers] =
         await Promise.all([
           getRevenueFromGithub(),
           getRevenueFromStripe(),
-          getProjects(users, req.body.range),
-          getResource(RESOURCE.NUMBER, req.body.range),
+          getProjects(users, payload),
+          getResource(RESOURCE.NUMBER, payload),
         ])
 
       return [

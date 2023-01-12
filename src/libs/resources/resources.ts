@@ -1,12 +1,5 @@
 import { redis } from './connections'
-import {
-  Entity,
-  Project,
-  Range,
-  RangeType,
-  RESOURCE,
-  ROUTR_RESOURCES,
-} from './types'
+import { Entity, Project, RangeType, RESOURCE, ROUTR_RESOURCES } from './types'
 
 export const getResourcesByRange = async (
   resourceType: RESOURCE,
@@ -31,20 +24,8 @@ export const getResourcesByRange = async (
     }
   }
 
-  const isCustomRange = typeof range === 'object'
-
-  const date = isCustomRange ? range : undefined
-
-  const end = date ? new Date(date.end) : new Date()
-  const start = date ? new Date(date.start) : new Date()
-
-  if (!isCustomRange && range === Range.LAST_7_DAYS) {
-    start.setDate(start.getDate() - 7)
-  }
-
-  if (!isCustomRange && range === Range.LAST_30_DAYS) {
-    start.setDate(start.getDate() - 30)
-  }
+  const end = new Date(range.end)
+  const start = new Date(range.start)
 
   return entities.filter(({ createdOn }) => {
     const createdAt = new Date(createdOn)

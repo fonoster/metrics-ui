@@ -243,7 +243,7 @@ table .thead--plans th {
 
 .pf-spinner-wrapper {
   align-items: center;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -345,4 +345,85 @@ table .thead--plans th {
 
 .StripeElement {
   @apply bg-gray-500 border-gray-100 rounded-md shadow-sm p-6;
+}
+
+.fn-range {
+  display: flex;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.fn-range .rdrDateRangePickerWrapper {
+  display: flex;
+  flex-grow: 1;
+  margin: auto;
+  @apply !border-gray-500;
+}
+
+.fn-range .rdrMonth {
+  width: 100% !important;
+}
+
+.fn-range .rdrCalendarWrapper {
+  flex-grow: 1;
+}
+
+.rdrStaticRange,
+.rdrDefinedRangesWrapper,
+.rdrCalendarWrapper,
+.rdrDefinedRangesWrapper {
+  @apply !bg-gray-700;
+}
+
+.rdrDateDisplayWrapper {
+  @apply !bg-gray-600;
+}
+
+.rdrDefinedRangesWrapper {
+  border-right: solid 1px #5b5f65 !important;
+}
+
+.rdrStaticRange {
+  border-bottom: 1px solid #5b5f65 !important;
+  color: white !important;
+}
+
+.rdrInputRanges {
+  display: none;
+}
+
+.rdrStaticRangeLabel {
+  font-size: 14px !important;
+}
+
+.rdrStaticRange:hover .rdrStaticRangeLabel, .rdrStaticRange:focus .rdrStaticRangeLabel {
+  @apply !bg-gray-700;
+}
+
+.rdrDayNumber span {
+  @apply !text-gray-300;
+}
+
+.rdrMonthAndYearPickers select {
+  @apply !text-gray-300;
+}
+
+.rdrMonthPicker, .rdrYearPicker {
+  @apply !bg-gray-700;
+}
+
+.rdrNextPrevButton {
+  @apply !bg-gray-700;
+}
+
+.rdrNextButton i {
+  border-color: transparent transparent transparent rgb(183 193 202) !important;
+}
+
+.rdrPprevButton i {
+  border-color: transparent rgb(183 193 202) transparent transparent !important;
+}
+
+.rdrDateDisplayItem {
+  @apply !bg-gray-500;
 }

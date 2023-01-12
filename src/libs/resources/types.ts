@@ -56,9 +56,4 @@ export interface Project {
   createTime: string
 }
 
-export enum Range {
-  LAST_7_DAYS = 'LAST_7_DAYS',
-  LAST_30_DAYS = 'LAST_30_DAYS',
-}
-
-export type RangeType = Range | { start: string; end: string }
+export type RangeType = { start: string; end: string }
