@@ -35,6 +35,7 @@ export const ROUTR_RESOURCES = [
 
 export interface Entity {
   ref: string
+  createdOn: string
 }
 
 export interface User extends Entity {
@@ -49,3 +50,15 @@ export interface Project extends Entity {
   accessKeyId: string
   accessKeySecret: string
 }
+
+export interface Project {
+  ref: string
+  createTime: string
+}
+
+export enum Range {
+  LAST_7_DAYS = 'LAST_7_DAYS',
+  LAST_30_DAYS = 'LAST_30_DAYS',
+}
+
+export type RangeType = Range | { start: string; end: string }

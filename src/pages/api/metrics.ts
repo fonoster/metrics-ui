@@ -11,14 +11,14 @@ export default async function handle(
 ) {
   const handlers = {
     get: async () => {
-      const users = await getUsers()
+      const users = await getUsers(req.body.range)
 
       const [revenueFromGithub, revenueFromStripe, projects, numbers] =
         await Promise.all([
           getRevenueFromGithub(),
           getRevenueFromStripe(),
-          getProjects(users),
-          getResource(RESOURCE.NUMBER),
+          getProjects(users, req.body.range),
+          getResource(RESOURCE.NUMBER, req.body.range),
         ])
 
       return [
